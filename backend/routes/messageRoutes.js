@@ -1,0 +1,15 @@
+import express from "express";
+import { getMessages, sendMessage, getChatUsers, markAsRead } from "../controllers/messageController.js";
+import { protect } from "../middleware/authMiddleware.js";
+
+const router = express.Router();
+
+// All routes require authentication
+router.use(protect);
+
+router.get("/users", getChatUsers);
+router.get("/:userId", getMessages);
+router.post("/", sendMessage);
+router.put("/:userId/read", markAsRead);
+
+export default router;

@@ -1,0 +1,26 @@
+/* src/styles/theme.css */
+
+:root {
+  --bg-light: #0F172A;
+  --primary: #059669;
+  --secondary: #047857;
+  --dark: #F0FDF4;
+  --accent-dark: #047857;
+  --text: #F0FDF4;
+}
+
+[data-theme="light"] {
+  --bg-light: #F8F9FA;
+  --primary: #059669;
+  --secondary: #047857;
+  --dark: #212529;
+  --accent-dark: #495057;
+  --text: #212529;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--dark);
+}
