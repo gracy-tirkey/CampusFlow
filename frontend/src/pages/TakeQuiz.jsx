@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../api/axios";
 import DashboardLayout from "../layouts/DashboardLayout";
+import { FaArrowLeft, FaArrowRight, FaCheck } from "react-icons/fa";
 
 function TakeQuiz() {
   const { id } = useParams();
@@ -36,17 +37,12 @@ function TakeQuiz() {
     setSubmitting(true);
     let correctAnswers = 0;
     quiz.questions.forEach((question, index) => {
-      if (answers[index] === question.correctAnswer) {
-        correctAnswers++;
-      }
+      if (answers[index] === question.correctAnswer) correctAnswers++;
     });
     const finalScore = Math.round((correctAnswers / quiz.questions.length) * 100);
 
     try {
-      await API.post("/quizzes/submit", {
-        quizId: id,
-        score: finalScore
-      });
+      await API.post("/quizzes/submit", { quizId: id, score: finalScore });
       setScore(finalScore);
     } catch (error) {
       console.error("Error submitting quiz:", error);
@@ -56,22 +52,18 @@ function TakeQuiz() {
   };
 
   const nextQuestion = () => {
-    if (currentQuestion < quiz.questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-    }
+    if (currentQuestion < quiz.questions.length - 1) setCurrentQuestion(currentQuestion + 1);
   };
 
   const prevQuestion = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1);
-    }
+    if (currentQuestion > 0) setCurrentQuestion(currentQuestion - 1);
   };
 
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex justify-center items-center h-64">
-          <div>Loading quiz...</div>
+        <div className="flex justify-center items-center h-64 text-text">
+          Loading quiz...
         </div>
       </DashboardLayout>
     );
@@ -89,20 +81,20 @@ function TakeQuiz() {
     return (
       <DashboardLayout>
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-6 text-dark">Quiz Completed!</h1>
-          <div className="bg-secondary p-8 rounded-lg shadow-md max-w-md mx-auto">
-            <h2 className="text-2xl font-bold text-primary mb-4">Your Score</h2>
-            <p className="text-4xl font-bold text-dark mb-4">{score}%</p>
-            <p className="text-text mb-6">
-              You got {Object.values(answers).filter((answer, index) =>
-                answer === quiz.questions[index].correctAnswer
-              ).length} out of {quiz.questions.length} questions correct.
+          <h1 className="text-2xl md:text-3xl font-bold mb-6 text-text">Quiz Completed!</h1>
+          <div className="bg-secondary p-6 md:p-8 rounded-lg shadow-md max-w-md mx-auto">
+            <h2 className="text-xl md:text-2xl font-bold text-text mb-4">Your Score</h2>
+            <p className="text-3xl md:text-4xl font-bold text-text mb-4">{score}%</p>
+            <p className="text-text text-sm md:text-base mb-6">
+              You got{" "}
+              {Object.values(answers).filter((answer, index) => answer === quiz.questions[index].correctAnswer).length}{" "}
+              out of {quiz.questions.length} questions correct.
             </p>
             <button
               onClick={() => navigate("/quiz")}
-              className="bg-primary text-text px-6 py-3 rounded hover:bg-primary/80 transition-colors"
+              className="flex items-center justify-center gap-2 bg-primary text-text px-4 md:px-6 py-2 md:py-3 rounded hover:bg-primary/80 transition-colors"
             >
-              Back to Quizzes
+              <FaArrowLeft /> Back to Quizzes
             </button>
           </div>
         </div>
@@ -115,16 +107,14 @@ function TakeQuiz() {
   return (
     <DashboardLayout>
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-dark">{quiz.title}</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-text">{quiz.title}</h1>
 
-        <div className="bg-secondary p-6 rounded-lg shadow-md">
-          <div className="mb-4">
-            <span className="text-sm text-text/70">
-              Question {currentQuestion + 1} of {quiz.questions.length}
-            </span>
+        <div className="bg-secondary p-4 md:p-6 rounded-lg shadow-md">
+          <div className="mb-3 text-sm text-text/70">
+            Question {currentQuestion + 1} of {quiz.questions.length}
           </div>
 
-          <h2 className="text-xl font-semibold mb-4 text-dark">{question.question}</h2>
+          <h2 className="text-lg md:text-xl font-semibold mb-4 text-dark">{question.question}</h2>
 
           <div className="space-y-2">
             {question.options.map((option, index) => (
@@ -147,26 +137,26 @@ function TakeQuiz() {
           <button
             onClick={prevQuestion}
             disabled={currentQuestion === 0}
-            className="bg-secondary text-dark px-4 py-2 rounded hover:bg-secondary/80 disabled:opacity-50"
+            className="flex items-center gap-2 bg-secondary text-dark px-3 py-2 rounded hover:bg-secondary/80 disabled:opacity-50 transition-colors"
           >
-            Previous
+            <FaArrowLeft /> Previous
           </button>
 
           {currentQuestion === quiz.questions.length - 1 ? (
             <button
               onClick={handleSubmit}
               disabled={submitting || !answers[currentQuestion]}
-              className="bg-primary text-text px-4 py-2 rounded hover:bg-primary/80 disabled:opacity-50"
+              className="flex items-center gap-2 bg-primary text-text px-3 py-2 rounded hover:bg-primary/80 disabled:opacity-50 transition-colors"
             >
-              {submitting ? "Submitting..." : "Submit Quiz"}
+              {submitting ? "Submitting..." : <>Submit Quiz <FaCheck /></>}
             </button>
           ) : (
             <button
               onClick={nextQuestion}
               disabled={!answers[currentQuestion]}
-              className="bg-primary text-text px-4 py-2 rounded hover:bg-primary/80 disabled:opacity-50"
+              className="flex items-center gap-2 bg-primary text-text px-3 py-2 rounded hover:bg-primary/80 disabled:opacity-50 transition-colors"
             >
-              Next
+              Next <FaArrowRight />
             </button>
           )}
         </div>

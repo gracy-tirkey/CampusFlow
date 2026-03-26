@@ -1,12 +1,21 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import API from "../api/axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { 
+  FaUser, 
+  FaEnvelope, 
+  FaPhone, 
+  FaUniversity, 
+  FaGraduationCap, 
+  FaBook, 
+  FaAlignLeft, 
+  FaLock 
+} from "react-icons/fa";
 
-function EditProfile() {
+export default function EditProfile() {
   const { user, login } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -57,7 +66,7 @@ function EditProfile() {
     try {
       const response = await API.put("/auth/update", formData);
       login(response.data.user, localStorage.getItem('token'));
-      navigate(-1); // Go back to previous page
+      navigate(-1);
     } catch (error) {
       setError(error.response?.data?.message || "Update failed");
     } finally {
@@ -66,88 +75,88 @@ function EditProfile() {
   };
 
   const handleCancel = () => {
-    navigate(-1); // Go back to previous page
+    navigate(-1);
   };
 
-  if (!user) {
-    return <div>Please login first</div>;
-  }
+  if (!user) return <div>Please login first</div>;
 
   return (
-    <div className="min-h-screen bg-bg-light flex items-center justify-center py-8">
-      <div className="bg-secondary p-8 rounded-lg shadow-md w-full max-w-2xl relative">
+    <div className="min-h-screen bg-light flex items-center justify-center py-8">
+      <div className="bg-dark p-8 rounded-lg shadow-md w-full max-w-2xl relative">
         <button
           onClick={handleCancel}
-          className="absolute top-4 right-4 text-dark hover:text-red-500 transition-colors text-2xl"
+          className="absolute top-4 right-4 text-text hover:text-red-500 transition-colors text-2xl"
           title="Cancel"
         >
           ✕
         </button>
 
-        <h2 className="text-2xl font-bold mb-6 text-text text-center">Edit Profile</h2>
-
+        <h2 className="text-2xl font-bold mb-6 text-primary text-center">Edit Profile</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-dark mb-2">Name</label>
+            <div className="flex items-center gap-2">
+              <FaUser className="text-primary" />
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Name"
+                className="w-full p-3 bg-light text-text rounded border border-dark/20"
                 required
               />
             </div>
 
-            <div>
-              <label className="block text-dark mb-2">Email</label>
+            <div className="flex items-center gap-2">
+              <FaEnvelope className="text-primary" />
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Email"
+                className="w-full p-3 bg-light text-text rounded border border-dark/20"
                 required
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-dark mb-2">Phone</label>
+            <div className="flex items-center gap-2">
+              <FaPhone className="text-primary" />
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="Enter your phone number"
+                placeholder="Phone"
+                className="w-full p-3 bg-light text-text rounded border border-dark/20"
               />
             </div>
 
-            <div>
-              <label className="block text-dark mb-2">Institution</label>
+            <div className="flex items-center gap-2">
+              <FaUniversity className="text-primary" />
               <input
                 type="text"
                 name="institution"
                 value={formData.institution}
                 onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="School/College name"
+                placeholder="Institution"
+                className="w-full p-3 bg-light text-text rounded border border-dark/20"
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-dark mb-2">Grade/Class</label>
+          <div className="flex items-center gap-2">
+            <FaGraduationCap className="text-primary" />
             <select
               name="grade"
               value={formData.grade}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-3 bg-light text-text rounded border border-dark/20"
             >
               <option value="">Select Grade/Class</option>
               <option value="9th">9th Grade</option>
@@ -161,10 +170,10 @@ function EditProfile() {
           </div>
 
           <div>
-            <label className="block text-dark mb-2">Subjects of Interest</label>
+            <label className="block text-text mb-2">Subjects of Interest:</label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {["Mathematics", "Physics", "Chemistry", "Biology", "Computer Science", "English", "History", "Geography", "Economics", "Other"].map(subject => (
-                <label key={subject} className="flex items-center space-x-2">
+                <label key={subject} className="flex items-center gap-2">
                   <input
                     type="checkbox"
                     checked={formData.subjects.includes(subject)}
@@ -177,28 +186,28 @@ function EditProfile() {
             </div>
           </div>
 
-          <div>
-            <label className="block text-dark mb-2">Bio</label>
+          <div className="flex items-center gap-2">
+            <FaAlignLeft className="text-primary" />
             <textarea
               name="bio"
               value={formData.bio}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded h-24 resize-none"
               placeholder="Tell us about yourself..."
+              className="w-full p-3 bg-light text-text rounded border border-dark/20 resize-none h-24"
               maxLength="500"
             />
-            <p className="text-sm text-gray-500 mt-1">{formData.bio.length}/500 characters</p>
           </div>
+          <p className="text-sm text-gray-500 mt-1">{formData.bio.length}/500 characters</p>
 
-          <div>
-            <label className="block text-dark mb-2">New Password (leave blank to keep current)</label>
+          <div className="flex items-center gap-2">
+            <FaLock className="text-primary" />
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
-              placeholder="Enter new password"
+              placeholder="New Password (leave blank to keep current)"
+              className="w-full p-3 bg-light text-text rounded border border-dark/20"
             />
           </div>
 
@@ -206,14 +215,14 @@ function EditProfile() {
             <button
               type="button"
               onClick={handleCancel}
-              className="flex-1 bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition-colors"
+              className="flex-1 bg-secondary text-text py-3 rounded hover:bg-primary/80 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-primary text-text py-2 px-4 rounded hover:bg-primary/80 transition-colors"
+              className="flex-1 bg-primary text-text py-3 rounded hover:bg-primary/80 transition-colors"
             >
               {loading ? "Updating..." : "Update Profile"}
             </button>
@@ -223,5 +232,3 @@ function EditProfile() {
     </div>
   );
 }
-
-export default EditProfile;

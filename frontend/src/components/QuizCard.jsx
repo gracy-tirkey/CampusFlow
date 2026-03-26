@@ -1,25 +1,30 @@
 import { Link } from "react-router-dom";
+import { FaPlay, FaQuestionCircle, FaUser } from "react-icons/fa";
 
 function QuizCard({ quiz }) {
-
   return (
-    <div className="bg-secondary p-5 rounded-lg hover:bg-secondary/80 transition-colors shadow-md hover:shadow-lg">
+    <div className="bg-secondary p-5 rounded-lg hover:bg-secondary/80 transition-colors shadow-md hover:shadow-lg flex flex-col justify-between">
 
-      <h2 className="text-xl font-semibold mb-2 text-text">
+      {/* Quiz Title */}
+      <h2 className="text-xl font-semibold mb-3 text-text flex items-center gap-2">
+        <FaQuestionCircle className="text-primary" />
         {quiz.title}
       </h2>
 
-      <p className="text-text/80">
-        Questions: {quiz.questions?.length || 0}
-      </p>
+      {/* Quiz Metadata */}
+      <div className="mb-4 space-y-1 text-text/80">
+        <p className="flex items-center gap-2">
+          <FaPlay className="text-primary" /> Questions: {quiz.questions?.length || 0}
+        </p>
+        <p className="flex items-center gap-2">
+          <FaUser className="text-primary" /> Created by: {quiz.createdBy?.name || "Unknown"}
+        </p>
+      </div>
 
-      <p className="text-text/80 mb-3">
-        Created by: {quiz.createdBy?.name || "Unknown"}
-      </p>
-
+      {/* Start Quiz Button */}
       <Link to={`/take-quiz/${quiz._id}`}>
-        <button className="bg-primary text-text px-4 py-2 rounded hover:bg-primary/80 transition-colors">
-          ▶️ Start Quiz
+        <button className="bg-primary text-text px-4 py-2 rounded hover:bg-primary/80 transition-colors shadow-sm hover:shadow-md flex items-center gap-2">
+          <FaPlay /> Start Quiz
         </button>
       </Link>
 

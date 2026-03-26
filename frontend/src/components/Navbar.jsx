@@ -1,12 +1,48 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import {
+  FaHome,
+  FaBook,
+  FaQuestionCircle,
+  FaComments,
+  FaClipboardList,
+  FaUserCircle,
+  FaSignOutAlt,
+  FaSignInAlt,
+  FaUserPlus,
+  FaMoon,
+  FaSun,
+  FaUser,
+} from "react-icons/fa";
+
 import { useAuth } from "../context/AuthContext";
-import { useTheme } from "../context/ThemeContext";
-import { useState } from "react";
 
 function Navbar({ showLogo = true, showSidebar = false }) {
   const { user, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const [showDropdown, setShowDropdown] = useState(false);
+  const location = useLocation();
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const isActive = (path) => location.pathname === path;
+  const getLinkClass = (path) => {
+    const baseClass = "flex items-center gap-1 transition-all duration-200 py-1 px-2 rounded";
+    return isActive(path)
+      ? `${baseClass} text-primary font-bold bg-primary/10 border-b-2 border-primary`
+      : `${baseClass} text-text hover:text-primary hover:bg-primary/5`;
+  };
 
   const handleLogout = () => {
     logout();
@@ -14,79 +50,110 @@ function Navbar({ showLogo = true, showSidebar = false }) {
   };
 
   return (
-    <div className="bg-dark p-4 flex justify-between items-center shadow-md">
+    <div className="bg-dark px-6 py-3 flex justify-between items-center shadow-md text-sm">
 
       {/* Logo */}
       {showLogo && (
         <img
           src="/images/logo-2.png"
           alt="Logo"
-          className="pl-3 pt-1 h-12 scale-[4.5] object-contain"
+          className="h-10 object-contain hover:scale-105 transition-transform"
         />
       )}
 
-      <div className="flex gap-6 ml-auto items-center">
+      <div className="flex gap-6 ml-auto items-center text-sm">
 
-        {/* Always visible */}
-        <Link to="/" className="text-text hover:text-primary transition-colors">
-          Home
-        </Link>
+        {/* Home */}
+        {/* <Link
+          to="/"
+          className="flex items-center gap-1 text-text hover:text-primary transition-all duration-200 hover:scale-105"
+        >
+          <FaHome /> <span className="hidden md:inline">Home</span>
+        </Link> */}
 
         {user ? (
           <>
-            {/* ✅ SHOW ONLY WHEN SIDEBAR IS NOT PRESENT */}
             {!showSidebar && (
               <>
+                {/* Home */}
                 <Link
-                  to={user.role === "teacher" ? "/teacher/dashboard" : "/student/dashboard"}
-                  className="text-text hover:text-primary transition-colors"
+                  to="/"
+                  className={getLinkClass("/")}
                 >
-                  Dashboard
+                  <FaHome /> <span className="hidden md:inline">Home</span>
+                </Link>
+                {/* Notes */}
+                <Link
+                  to="/notes"
+                  className={getLinkClass("/notes")}
+                >
+                  <FaBook />
+                  <span className="hidden md:inline">Notes</span>
                 </Link>
 
-                <Link to="/notes" className="text-text hover:text-primary transition-colors">
-                  Notes
+                {/* Q&A */}
+                <Link
+                  to="/doubts"
+                  className={getLinkClass("/doubts")}
+                >
+                  <FaQuestionCircle />
+                  <span className="hidden md:inline">Doubts</span>
                 </Link>
 
-                <Link to="/doubts" className="text-text hover:text-primary transition-colors">
-                  Doubts
+                {/* Chat */}
+                <Link
+                  to="/chat"
+                  className={getLinkClass("/chat")}
+                >
+                  <FaComments />
+                  <span className="hidden md:inline">Chat</span>
                 </Link>
 
-                <Link to="/chat" className="text-text hover:text-primary transition-colors">
-                  Chat
-                </Link>
-
-                <Link to="/quiz" className="text-text hover:text-primary transition-colors">
-                  Quiz
+                {/* Quiz */}
+                <Link
+                  to="/quiz"
+                  className={getLinkClass("/quiz")}
+                >
+                  <FaClipboardList />
+                  <span className="hidden md:inline">Quiz</span>
                 </Link>
               </>
             )}
 
             {/* User Dropdown */}
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="text-text hover:text-primary transition-colors flex items-center gap-2"
+                className="flex items-center gap-1 text-text hover:text-primary transition"
               >
-                <span>👤</span> 
+                <FaUserCircle size={20} />
               </button>
 
               {showDropdown && (
                 <div className="absolute right-0 mt-2 w-48 bg-light rounded-md shadow-lg z-10">
-                  <p className="flex justify-center p-2 bg-secondary text-text">{user.name}</p>
+
+                  {/* User Name */}
+                  <div className="flex justify-center p-2 bg-secondary text-text font-semibold">
+                    {user.name}
+                  </div>
+
+                  {/* Edit Profile */}
+
+
                   <Link
-                    to="/edit-profile"
-                    className="block px-4 py-2 text-text hover:bg-primary hover:text-text"
+                    to={user.role === "teacher" ? "/teacher/dashboard" : "/student/dashboard"}
+                    className="flex items-center gap-2 px-4 py-2 text-text hover:bg-primary hover:text-white transition"
                     onClick={() => setShowDropdown(false)}
                   >
-                    Edit Profile
+                   <FaUser/> View Profile
                   </Link>
 
+                  {/* Logout */}
                   <button
                     onClick={handleLogout}
-                    className="block w-full text-left px-4 py-2 text-text hover:bg-primary hover:text-text"
+                    className="flex items-center gap-2 w-full text-left px-4 py-2 text-text hover:bg-red-500 hover:text-white transition"
                   >
-                    Logout
+                    <FaSignOutAlt /> Logout
                   </button>
                 </div>
               )}
@@ -94,22 +161,23 @@ function Navbar({ showLogo = true, showSidebar = false }) {
           </>
         ) : (
           <>
-            <Link to="/login" className="text-text hover:text-primary transition-colors">
-              Login
+            {/* Login */}
+            <Link
+              to="/login"
+              className="flex items-center gap-1 text-text hover:text-primary transition"
+            >
+              <FaSignInAlt /> Login
             </Link>
-            <Link to="/register" className="text-text hover:text-primary transition-colors">
-              Register
+
+            {/* Register */}
+            <Link
+              to="/register"
+              className="flex items-center gap-1 text-text hover:text-primary transition"
+            >
+              <FaUserPlus /> Register
             </Link>
           </>
         )}
-
-        {/* Theme Toggle */}
-        <button
-          onClick={toggleTheme}
-          className="text-text hover:text-primary transition-colors"
-        >
-          {theme === "light" ? "🌙" : "☀️"}
-        </button>
       </div>
     </div>
   );

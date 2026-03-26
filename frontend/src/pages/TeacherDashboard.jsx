@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import API from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import { FaUpload, FaCheckCircle, FaClipboardList } from "react-icons/fa";
 
 function TeacherDashboard() {
   const { user } = useAuth();
   const [stats, setStats] = useState({
     notesUploaded: 0,
     doubtsSolved: 0,
-    quizzesCreated: 0
+    quizzesCreated: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -30,34 +31,43 @@ function TeacherDashboard() {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="text-center">Loading...</div>
+        <div className="text-center text-text">Loading...</div>
       </DashboardLayout>
     );
   }
 
   return (
     <DashboardLayout>
-      <h1 className="text-3xl font-bold mb-6 text-text">
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-text">
         Welcome, {user?.name || "Teacher"}!
       </h1>
 
-      <div className="grid grid-cols-3 gap-6">
-        <div className="bg-secondary p-6 rounded-lg shadow-md hover:bg-secondary/80 transition-colors">
-          <h3 className="text-lg font-semibold text-dark mb-2">Notes Uploaded</h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        {/* Notes Uploaded */}
+        <div className="bg-secondary p-4 md:p-6 rounded-lg shadow-md hover:bg-secondary/80 transition-colors flex flex-col items-start gap-2">
+          <div className="flex items-center gap-2 text-primary">
+            <FaUpload /> <h3 className="text-lg font-semibold text-dark">Notes Uploaded</h3>
+          </div>
           <p className="text-2xl font-bold text-primary">{stats.notesUploaded}</p>
-          <p className="text-text">Manage your uploaded notes</p>
+          <p className="text-text text-sm">Manage your uploaded notes</p>
         </div>
 
-        <div className="bg-secondary p-6 rounded-lg shadow-md hover:bg-secondary/80 transition-colors">
-          <h3 className="text-lg font-semibold text-dark mb-2">Doubts Solved</h3>
+        {/* Doubts Solved */}
+        <div className="bg-secondary p-4 md:p-6 rounded-lg shadow-md hover:bg-secondary/80 transition-colors flex flex-col items-start gap-2">
+          <div className="flex items-center gap-2 text-primary">
+            <FaCheckCircle /> <h3 className="text-lg font-semibold text-dark">Doubts Solved</h3>
+          </div>
           <p className="text-2xl font-bold text-primary">{stats.doubtsSolved}</p>
-          <p className="text-text">View doubts you've answered</p>
+          <p className="text-text text-sm">View doubts you've answered</p>
         </div>
 
-        <div className="bg-secondary p-6 rounded-lg shadow-md hover:bg-secondary/80 transition-colors">
-          <h3 className="text-lg font-semibold text-dark mb-2">Quiz Created</h3>
+        {/* Quizzes Created */}
+        <div className="bg-secondary p-4 md:p-6 rounded-lg shadow-md hover:bg-secondary/80 transition-colors flex flex-col items-start gap-2">
+          <div className="flex items-center gap-2 text-primary">
+            <FaClipboardList /> <h3 className="text-lg font-semibold text-dark">Quizzes Created</h3>
+          </div>
           <p className="text-2xl font-bold text-primary">{stats.quizzesCreated}</p>
-          <p className="text-text">Manage your created quizzes</p>
+          <p className="text-text text-sm">Manage your created quizzes</p>
         </div>
       </div>
     </DashboardLayout>

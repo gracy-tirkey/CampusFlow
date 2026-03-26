@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import React from "react";
 
 function Footer() {
   return (
@@ -8,7 +10,7 @@ function Footer() {
         {/* Brand */}
         <div>
           <h2 className="text-2xl font-bold text-secondary">
-            NotesProvider
+            CampusFlow
           </h2>
           <p className="mt-3 text-sm text-text/80">
             A collaborative platform for students and teachers to share notes,
@@ -23,17 +25,17 @@ function Footer() {
           </h3>
           <ul className="space-y-2">
             <li>
-              <Link to="/" className="hover:text-secondary transition">
+              <Link to="/" className="hover:text-secondary transition-colors duration-200">
                 Home
               </Link>
             </li>
             <li>
-              <Link to="/login" className="hover:text-secondary transition">
+              <Link to="/login" className="hover:text-secondary transition-colors duration-200">
                 Login
               </Link>
             </li>
             <li>
-              <Link to="/register" className="hover:text-secondary transition">
+              <Link to="/register" className="hover:text-secondary transition-colors duration-200">
                 Register
               </Link>
             </li>
@@ -49,15 +51,28 @@ function Footer() {
             Have questions or feedback? Reach out!
           </p>
 
-          <div className="flex gap-4 mt-4">
-            <a href="#" className="hover:text-secondary transition">
-              GitHub
+          <div className="flex gap-4 mt-4 text-xl">
+            <a
+              href="https://github.com/gracy-tirkey/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-secondary transition-colors duration-200"
+            >
+              <FaGithub />
             </a>
-            <a href="#" className="hover:text-secondary transition">
-              LinkedIn
+            <a
+              href="https://in.linkedin.com/in/gracy-tirkey-069945296"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-secondary transition-colors duration-200"
+            >
+              <FaLinkedin />
             </a>
-            <a href="#" className="hover:text-secondary transition">
-              Email
+            <a
+              href="mailto:ariasaikia@gmail.com"
+              className="hover:text-secondary transition-colors duration-200"
+            >
+              <FaEnvelope />
             </a>
           </div>
         </div>
@@ -65,7 +80,7 @@ function Footer() {
 
       {/* Bottom Line */}
       <div className="border-t border-secondary mt-8 pt-4 text-center text-sm text-text/70">
-        © {new Date().getFullYear()} NotesProvider. All rights reserved.
+        © {new Date().getFullYear()} CampusFlow. All rights reserved.
       </div>
     </footer>
   );

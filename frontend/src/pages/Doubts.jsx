@@ -3,8 +3,9 @@ import DoubtCard from "../components/DoubtCard";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import API from "../api/axios";
+import { FaQuestionCircle, FaSearch } from "react-icons/fa";
 
-function Doubts() {
+export default function Doubts() {
   const [doubts, setDoubts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -52,29 +53,27 @@ function Doubts() {
 
   return (
     <DashboardLayout>
-
-      <div className="flex justify-between items-center mb-6">
-
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
         <h1 className="text-3xl font-bold text-text">
           Doubt Discussion
         </h1>
 
         <Link to="/ask-doubt">
-          <button className="bg-primary text-text px-6 py-3 rounded hover:bg-primary/80 transition-colors shadow-md">
-            ❓ Ask Doubt
+          <button className="flex items-center gap-2 bg-primary text-text px-6 py-3 rounded hover:bg-primary/80 transition-colors shadow-md">
+            <FaQuestionCircle /> Ask Doubt
           </button>
         </Link>
-
       </div>
 
       {/* Search Bar */}
-      <div className="mb-6">
+      <div className="mb-6 relative">
+        <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-primary" />
         <input
           type="text"
           placeholder="Search doubts by question..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-3 bg-secondary text-text rounded border border-dark/20 placeholder-text/70"
+          className="w-full pl-10 p-3 bg-secondary text-text rounded border border-dark/20 placeholder-text/70 focus:outline-none focus:ring-2 focus:ring-primary"
         />
       </div>
 
@@ -89,9 +88,6 @@ function Doubts() {
           ))}
         </div>
       )}
-
     </DashboardLayout>
   );
 }
-
-export default Doubts;

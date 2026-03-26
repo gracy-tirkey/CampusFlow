@@ -1,5 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+  FaUserGraduate,
+  FaChalkboardTeacher,
+  FaUserPlus,
+  FaExclamationCircle,
+  FaSignInAlt
+} from 'react-icons/fa';
+
 import API from '../api/axios';
 import useBackgroundImage from "../hooks/useBackgroundImage";
 
@@ -12,8 +25,11 @@ function Register() {
     password: '',
     role: 'student'
   });
+
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -28,7 +44,6 @@ function Register() {
     setLoading(true);
     setError('');
 
-    // Validation
     if (!formData.name || !formData.email || !formData.password) {
       setError("Please fill in all fields");
       setLoading(false);
@@ -55,8 +70,7 @@ function Register() {
     }
 
     try {
-      const response = await API.post('/auth/register', formData);
-      console.log('Registration successful:', response.data);
+      await API.post('/auth/register', formData);
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
@@ -75,73 +89,140 @@ function Register() {
       }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
 
-      <div className="relative bg-dark/80 backdrop-blur-md p-8 rounded-lg w-96 shadow-lg">
+      <div className="relative bg-dark/90 backdrop-blur-md p-8 rounded-xl w-96 shadow-2xl border border-white/10">
 
-          
-        <h2 className="text-2xl mb-6 text-center text-text">
+        {/* Title */}
+        <h2 className="text-2xl mb-6 text-center text-text flex items-center justify-center gap-2">
+          <FaUserPlus className="text-primary" />
           Register
         </h2>
 
+        {/* Error */}
         {error && (
-          <div className="mb-4 p-2 bg-red-600 text-white rounded">
+          <div className="mb-4 p-2 bg-red-600 text-white rounded flex items-center gap-2 text-sm">
+            <FaExclamationCircle />
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full p-2 mb-4 bg-secondary text-text rounded placeholder-text/70"
-            required
-          />
+        <form onSubmit={handleSubmit} className="space-y-4">
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full p-2 mb-4 bg-secondary text-text rounded placeholder-text/70"
-            required
-          />
+          {/* Reusable Input Style */}
+          {/* Name */}
+          <div className="relative group">
+            <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 
+                              text-primary/70 group-focus-within:text-primary" />
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full p-2 mb-4 bg-secondary text-text rounded placeholder-text/70"
-            required
-          />
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full h-11 pl-10 pr-3 rounded-lg 
+                         bg-white/5 border border-white/10 
+                         text-text placeholder-text/60
+                         focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
+                         transition-all"
+              required
+            />
+          </div>
 
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            className="w-full p-2 mb-4 bg-secondary text-text rounded"
-          >
-            <option value="student">Student</option>
-            <option value="teacher">Teacher</option>
-          </select>
+          {/* Email */}
+          <div className="relative group">
+            <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 
+                                  text-primary/70 group-focus-within:text-primary" />
 
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full h-11 pl-10 pr-3 rounded-lg 
+                         bg-white/5 border border-white/10 
+                         text-text placeholder-text/60
+                         focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
+                         transition-all"
+              required
+            />
+          </div>
+
+          {/* Password */}
+          <div className="relative group">
+            <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 
+                               text-primary/70 group-focus-within:text-primary" />
+
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full h-11 pl-10 pr-10 rounded-lg 
+                         bg-white/5 border border-white/10 
+                         text-text placeholder-text/60
+                         focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
+                         transition-all"
+              required
+            />
+
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer 
+                         text-primary/70 hover:text-primary"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
+
+          {/* Role */}
+          <div className="relative group">
+            {formData.role === "student" ? (
+              <FaUserGraduate className="absolute left-3 top-1/2 -translate-y-1/2 
+                                         text-primary/70 group-focus-within:text-primary" />
+            ) : (
+              <FaChalkboardTeacher className="absolute left-3 top-1/2 -translate-y-1/2 
+                                              text-primary/70 group-focus-within:text-primary" />
+            )}
+
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full h-11 pl-10 pr-3 rounded-lg 
+                         bg-white/5 border border-white/10 
+                         text-text
+                         focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
+                         transition-all appearance-none"
+            >
+              <option className="bg-dark text-white" value="student">Student</option>
+              <option className="bg-dark text-white" value="teacher">Teacher</option>
+            </select>
+          </div>
+
+          {/* Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary hover:bg-primary/80 p-2 rounded text-text disabled:opacity-50 transition-colors"
+            className="w-full h-11 bg-primary hover:bg-primary/80 rounded-lg text-text 
+                       flex items-center justify-center gap-2 transition-all disabled:opacity-50"
           >
             {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
 
-        <p className="mt-4 text-center text-text">
-          Already have an account? <Link to="/login" className="text-primary hover:text-primary/80">Login</Link>
+        {/* Login */}
+        <p className="mt-4 text-center text-text text-sm flex items-center justify-center gap-2">
+          Already have an account?
+          <Link
+            to="/login"
+            className="text-primary hover:text-primary/80 flex items-center gap-1"
+          >
+            <FaSignInAlt /> Login
+          </Link>
         </p>
       </div>
     </div>

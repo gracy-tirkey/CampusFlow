@@ -24,7 +24,7 @@ function Home() {
         {/* Content */}
         <div className="relative z-10 px-4">
           <h1 className="text-5xl font-bold mb-6 text-white">
-            Welcome to NoteNest
+            Welcome to  <span className="text-primary">CampusFlow!</span>
           </h1>
 
           <p className="text-gray-200 max-w-xl">

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import API from "../api/axios";
+import { FaPaperPlane, FaImage, FaQuestionCircle } from "react-icons/fa";
 
 function AskDoubt() {
   const [question, setQuestion] = useState("");
@@ -41,11 +42,10 @@ function AskDoubt() {
 
   return (
     <DashboardLayout>
-
       <div className="max-w-xl mx-auto bg-secondary p-8 rounded-lg shadow-md">
 
-        <h1 className="text-2xl font-bold mb-6 text-text">
-          Ask a Doubt
+        <h1 className="flex items-center gap-2 text-2xl font-bold mb-6 text-text">
+          <FaQuestionCircle /> Ask a Doubt
         </h1>
 
         {error && (
@@ -65,25 +65,26 @@ function AskDoubt() {
             required
           />
 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
-            className="p-3 bg-light text-text rounded border border-dark/20"
-          />
+          <label className="flex items-center gap-2 p-3 bg-light text-text rounded border border-dark/20 cursor-pointer hover:bg-light/90 transition-colors">
+            <FaImage /> {image ? image.name : "Attach an image (optional)"}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
+              className="hidden"
+            />
+          </label>
 
           <button
             type="submit"
             disabled={loading}
-            className="bg-primary text-text py-3 rounded hover:bg-primary/80 transition-colors shadow-md disabled:opacity-50"
+            className="flex items-center justify-center gap-2 bg-primary text-text py-3 rounded hover:bg-primary/80 transition-colors shadow-md disabled:opacity-50"
           >
-            {loading ? "Posting..." : "Post Doubt"}
+            <FaPaperPlane /> {loading ? "Posting..." : "Post Doubt"}
           </button>
 
         </form>
-
       </div>
-
     </DashboardLayout>
   );
 }
