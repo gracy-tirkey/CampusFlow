@@ -81,8 +81,8 @@ function CreateQuiz() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-text text-center">
+      <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-text text-center">
           Create New Quiz
         </h1>
 
@@ -166,11 +166,11 @@ function CreateQuiz() {
           ))}
 
           {/* Actions */}
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               type="button"
               onClick={addQuestion}
-              className="flex items-center gap-2 bg-secondary text-dark px-6 py-3 rounded hover:bg-secondary/80 transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 bg-secondary text-dark text-sm sm:text-base px-4 py-2 md:px-6 md:py-3 rounded hover:bg-secondary/80 transition-colors"
             >
               <FaPlusCircle /> Add Question
             </button>
@@ -178,7 +178,7 @@ function CreateQuiz() {
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 bg-primary text-text px-6 py-3 rounded hover:bg-primary/80 transition-colors shadow-md disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 bg-primary text-text text-sm sm:text-base px-4 py-2 md:px-6 md:py-3 rounded hover:bg-primary/80 transition-colors shadow-md disabled:opacity-50"
             >
               <FaCheckCircle /> {loading ? "Creating Quiz..." : "Create Quiz"}
             </button>

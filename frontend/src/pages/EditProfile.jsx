@@ -81,17 +81,17 @@ export default function EditProfile() {
   if (!user) return <div>Please login first</div>;
 
   return (
-    <div className="min-h-screen bg-light flex items-center justify-center py-8">
-      <div className="bg-dark p-8 rounded-lg shadow-md w-full max-w-2xl relative">
+    <div className="min-h-screen bg-light flex items-center justify-center py-8 px-3 sm:px-6">
+      <div className="bg-dark p-6 sm:p-8 rounded-lg shadow-md w-full max-w-2xl relative">
         <button
           onClick={handleCancel}
-          className="absolute top-4 right-4 text-text hover:text-red-500 transition-colors text-2xl"
+          className="absolute top-4 right-4 text-text hover:text-red-500 transition-colors text-xl sm:text-2xl"
           title="Cancel"
         >
           ✕
         </button>
 
-        <h2 className="text-2xl font-bold mb-6 text-primary text-center">Edit Profile</h2>
+<h2 className="text-xl sm:text-2xl font-bold mb-6 text-primary text-center">Edit Profile</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -211,18 +211,18 @@ export default function EditProfile() {
             />
           </div>
 
-          <div className="flex gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <button
               type="button"
               onClick={handleCancel}
-              className="flex-1 bg-secondary text-text py-3 rounded hover:bg-primary/80 transition-colors"
+              className="w-full sm:w-1/2 bg-secondary text-text py-3 text-sm sm:text-base rounded hover:bg-primary/80 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-primary text-text py-3 rounded hover:bg-primary/80 transition-colors"
+              className="w-full sm:w-1/2 bg-primary text-text py-3 text-sm sm:text-base rounded hover:bg-primary/80 transition-colors"
             >
               {loading ? "Updating..." : "Update Profile"}
             </button>

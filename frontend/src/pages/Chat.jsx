@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import API from "../api/axios";
 import Navbar from "../components/Navbar";
-import { FaHome, FaUserAlt, FaCommentDots, FaPaperPlane } from "react-icons/fa";
+import { FaHome, FaUserAlt, FaCommentDots, FaPaperPlane, FaBars, FaTimes } from "react-icons/fa";
 
 export default function Chat() {
   const { user } = useAuth();
@@ -13,6 +13,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const socketRef = useRef(null);
 
@@ -84,6 +85,7 @@ export default function Chat() {
   const selectUser = async (chatUser) => {
     setSelectedUser(chatUser);
     await loadMessages(chatUser._id);
+    setIsSidebarOpen(false); // Close sidebar on mobile after selecting user
   };
 
   const sendMessage = () => {
@@ -120,11 +122,19 @@ export default function Chat() {
   return (
     <>
       <Navbar showLogo={true} showSidebar={false} />
-      <div className="min-h-screen bg-light text-text flex">
+      <div className="min-h-screen bg-light text-text flex relative">
         {/* Chat Users Sidebar */}
-        <div className="w-1/3 bg-primary border-r border-dark/20 flex flex-col">
-          <div className="p-4 border-b border-dark/20 flex items-center gap-2 font-bold text-xl text-text">
-            <FaCommentDots /> Messages
+        <div className={`fixed inset-y-0 left-0 z-50 w-80 bg-primary border-r border-dark/20 flex flex-col transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/3`}>
+          <div className="p-4 border-b border-dark/20 flex items-center justify-between">
+            <div className="flex items-center gap-2 font-bold text-xl text-text">
+              <FaCommentDots /> Messages
+            </div>
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className="text-text hover:text-primary md:hidden"
+            >
+              <FaTimes size={20} />
+            </button>
           </div>
           <div className="flex-1 overflow-y-auto">
             {chatUsers.map(chatUser => (
@@ -150,13 +160,22 @@ export default function Chat() {
           </div>
         </div>
 
+        {/* Overlay for mobile */}
+        {isSidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" onClick={() => setIsSidebarOpen(false)}></div>}
+
         {/* Chat Area */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col md:ml-0">
           {selectedUser ? (
             <>
               {/* Chat Header */}
               <div className="p-4 border-b border-dark/20 bg-secondary flex items-center justify-between">
                 <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => setIsSidebarOpen(true)}
+                    className="md:hidden text-text hover:text-primary mr-2"
+                  >
+                    <FaBars size={20} />
+                  </button>
                   <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-text font-bold">{selectedUser.name?.charAt(0)?.toUpperCase() || '?'}</div>
                   <div>
                     <h3 className="font-semibold text-dark">{selectedUser.name}</h3>
@@ -205,6 +224,12 @@ export default function Chat() {
                 </div>
                 <h3 className="text-xl font-semibold text-dark mb-2">Select a conversation</h3>
                 <p className="text-text/60">Choose a user from the sidebar to start chatting</p>
+                <button
+                  onClick={() => setIsSidebarOpen(true)}
+                  className="mt-4 md:hidden bg-primary text-text px-4 py-2 rounded hover:bg-primary/80 transition-colors"
+                >
+                  Open Messages
+                </button>
               </div>
             </div>
           )}

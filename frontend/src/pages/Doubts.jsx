@@ -53,13 +53,13 @@ export default function Doubts() {
 
   return (
     <DashboardLayout>
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-        <h1 className="text-3xl font-bold text-text">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-text">
           Doubt Discussion
         </h1>
 
         <Link to="/ask-doubt">
-          <button className="flex items-center gap-2 bg-primary text-text px-6 py-3 rounded hover:bg-primary/80 transition-colors shadow-md">
+          <button className="flex items-center gap-2 bg-primary text-text text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 rounded hover:bg-primary/80 transition-colors shadow-md">
             <FaQuestionCircle /> Ask Doubt
           </button>
         </Link>

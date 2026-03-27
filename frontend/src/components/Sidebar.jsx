@@ -4,10 +4,11 @@ import {
   FaBook,
   FaQuestionCircle,
   FaComments,
-  FaClipboardList
+  FaClipboardList,
+  FaTimes
 } from "react-icons/fa";
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }) {
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
@@ -18,7 +19,14 @@ export default function Sidebar() {
       : baseClass;
   };
   return (
-    <div className="w-56 bg-dark p-4 flex flex-col shadow-lg min-h-screen text-sm">
+    <div className="w-56 bg-dark p-4 flex flex-col shadow-lg min-h-screen text-sm relative">
+      {/* Close button for mobile */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-text hover:text-primary md:hidden"
+      >
+        <FaTimes size={20} />
+      </button>
 
       {/* Logo */}
       <div className="mb-6 flex justify-center items-center h-20 overflow-hidden">
@@ -35,6 +43,7 @@ export default function Sidebar() {
         <Link
           to="/"
           className={getLinkClass("/")}
+          onClick={onClose}
         >
           <FaHome /> <span className="hidden md:inline">Home</span>
         </Link>
@@ -42,6 +51,7 @@ export default function Sidebar() {
         <Link
           to="/notes"
           className={getLinkClass("/notes")}
+          onClick={onClose}
         >
           <FaBook /> Notes
         </Link>
@@ -49,6 +59,7 @@ export default function Sidebar() {
         <Link
           to="/doubts"
           className={getLinkClass("/doubts")}
+          onClick={onClose}
         >
           <FaQuestionCircle /> Doubts
         </Link>
@@ -56,6 +67,7 @@ export default function Sidebar() {
         <Link
           to="/chat"
           className={getLinkClass("/chat")}
+          onClick={onClose}
         >
           <FaComments /> Chat
         </Link>
@@ -63,6 +75,7 @@ export default function Sidebar() {
         <Link
           to="/quiz"
           className={getLinkClass("/quiz")}
+          onClick={onClose}
         >
           <FaClipboardList /> Quiz
         </Link>

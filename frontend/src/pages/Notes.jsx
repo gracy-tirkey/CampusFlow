@@ -65,13 +65,13 @@ export default function Notes() {
       <Navbar showLogo={true} showSidebar={false} />
       <div className="min-h-screen bg-light text-text p-6">
 
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-text">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-text">
             Study Materials
           </h1>
 
           <Link to="/upload-notes">
-            <button className="flex items-center gap-2 bg-primary text-text px-4 py-2 md:px-6 md:py-3 rounded hover:bg-primary/80 transition-colors shadow-md">
+            <button className="flex items-center gap-2 bg-primary text-text text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 rounded hover:bg-primary/80 transition-colors shadow-md">
               <FaUpload /> Upload New Note
             </button>
           </Link>

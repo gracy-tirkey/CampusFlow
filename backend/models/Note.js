@@ -26,8 +26,9 @@ const noteSchema = new mongoose.Schema({
     ref: "User"
   },
   downloadedBy:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "User",
+    default: []
   },
 
   role: {

@@ -42,9 +42,9 @@ function AskDoubt() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-xl mx-auto bg-secondary p-8 rounded-lg shadow-md">
+      <div className="w-full max-w-xl mx-auto px-4 sm:px-6 bg-secondary p-6 sm:p-8 rounded-lg shadow-md">
 
-        <h1 className="flex items-center gap-2 text-2xl font-bold mb-6 text-text">
+        <h1 className="flex items-center gap-2 text-xl sm:text-2xl font-bold mb-6 text-text">
           <FaQuestionCircle /> Ask a Doubt
         </h1>
 

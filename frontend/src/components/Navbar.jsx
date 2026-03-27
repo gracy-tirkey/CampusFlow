@@ -10,14 +10,13 @@ import {
   FaSignOutAlt,
   FaSignInAlt,
   FaUserPlus,
-  FaMoon,
-  FaSun,
   FaUser,
+  FaBars
 } from "react-icons/fa";
 
 import { useAuth } from "../context/AuthContext";
 
-function Navbar({ showLogo = true, showSidebar = false }) {
+function Navbar({ showLogo = true, showSidebar = false, onToggleSidebar }) {
   const { user, logout } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
   const location = useLocation();
@@ -51,25 +50,28 @@ function Navbar({ showLogo = true, showSidebar = false }) {
 
   return (
     <div className="bg-dark px-6 py-3 flex justify-between items-center shadow-md text-sm">
+      <div className="flex items-center gap-4">
+        {/* Hamburger menu for sidebar */}
+        {showSidebar && (
+          <button
+            onClick={onToggleSidebar}
+            className="text-text hover:text-primary md:hidden"
+          >
+            <FaBars size={20} />
+          </button>
+        )}
 
-      {/* Logo */}
-      {showLogo && (
-        <img
-          src="/images/logo-2.png"
-          alt="Logo"
-          className="h-10 object-contain hover:scale-105 transition-transform"
-        />
-      )}
+        {/* Logo */}
+        {showLogo && (
+          <img
+            src="/images/logo-2.png"
+            alt="CampusFlow Logo"
+            className="h-8 sm:h-10 md:h-12 object-contain hover:scale-110 transition-all duration-300 drop-shadow-lg border border-primary/20 rounded-md p-1 bg-white/10 backdrop-blur-sm"
+          />
+        )}
+      </div>
 
       <div className="flex gap-6 ml-auto items-center text-sm">
-
-        {/* Home */}
-        {/* <Link
-          to="/"
-          className="flex items-center gap-1 text-text hover:text-primary transition-all duration-200 hover:scale-105"
-        >
-          <FaHome /> <span className="hidden md:inline">Home</span>
-        </Link> */}
 
         {user ? (
           <>
@@ -136,9 +138,6 @@ function Navbar({ showLogo = true, showSidebar = false }) {
                   <div className="flex justify-center p-2 bg-secondary text-text font-semibold">
                     {user.name}
                   </div>
-
-                  {/* Edit Profile */}
-
 
                   <Link
                     to={user.role === "teacher" ? "/teacher/dashboard" : "/student/dashboard"}

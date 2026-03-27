@@ -22,13 +22,14 @@ export const getDashboardStats = async (req, res) => {
       // Doubts Asked: count doubts asked by user
       const doubtsAsked = await Doubt.countDocuments({ askedBy: userId });
 
-      // Quiz Points: user's points
-      const quizPoints = await Result.findById(userId);
+      // Quiz Points: sum of all quiz scores for the user
+      const quizResults = await Result.find({ userId });
+      const quizPoints = quizResults.reduce((total, result) => total + (result.score || 0), 0);
 
       stats = {
         notesDownloaded,
         doubtsAsked,
-        quizPoints : quizPoints.score,
+        quizPoints,
       };
     } else if (user.role === "teacher") {
       // Notes Uploaded: count notes uploaded by user

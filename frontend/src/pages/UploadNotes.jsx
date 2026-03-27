@@ -63,7 +63,7 @@ export default function UploadNotes() {
   };
 
   return (
-    <div className="min-h-screen bg-light text-text p-6">
+    <div className="min-h-screen bg-light text-text p-4 sm:p-6">
 
 
       {error && (
@@ -74,9 +74,9 @@ export default function UploadNotes() {
 
       <form
         onSubmit={uploadNote}
-        className="bg-dark p-6 mx-20 rounded-lg mb-8 space-y-4 shadow-md"
+        className="bg-dark p-4 sm:p-6 mx-auto max-w-3xl rounded-lg mb-8 space-y-4 shadow-md"
       >
-      <h2 className="text-2xl font-bold mb-6 text-primary text-center">Upload Notes</h2>
+      <h2 className="text-xl sm:text-2xl font-bold mb-6 text-primary text-center">Upload Notes</h2>
 
         <div className="flex items-center gap-2">
           <FaFileAlt className="text-primary" />
@@ -123,7 +123,7 @@ export default function UploadNotes() {
         <button
           type="submit"
           disabled={uploading}
-          className="flex items-center gap-2 bg-secondary text-text px-6 py-3 rounded hover:bg-primary/80 transition-colors"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 bg-secondary text-text text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3 rounded hover:bg-primary/80 transition-colors"
         >
           <FaUpload /> {uploading ? "Uploading..." : "Upload Note"}
         </button>
