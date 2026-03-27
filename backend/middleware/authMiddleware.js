@@ -2,6 +2,10 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 export const protect = async (req, res, next) => {
+  if (!process.env.JWT_SECRET) {
+    console.error("❌ Missing JWT_SECRET in .env file");
+    return res.status(500).json({ message: "Server configuration error" });
+  }
 
   let token;
 

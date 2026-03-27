@@ -50,7 +50,9 @@ function Home() {
             </span>
           </h1>
 
-          <p className={`text-gray-200 max-w-xl text-sm sm:text-base md:text-lg transition-all duration-1000 delay-1000 ${showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+          <p className={`text-gray-200 max-w-xl text-sm sm:text-base md:text-lg transition-all duration-1000 ${showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+             style={{ transitionDelay: showContent ? "0.5s" : "0s" }}
+          >
             A platform where students and teachers can share notes,
             solve doubts, chat, and participate in quizzes.
           </p>

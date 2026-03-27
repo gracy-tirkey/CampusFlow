@@ -1,36 +1,18 @@
 import multer from "multer";
-import path from "path";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "campusflow",
+    allowed_formats: ["jpg", "png", "jpeg", "pdf"],
   },
-
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
 });
 
-const fileFilter = (req, file, cb) => {
-
-  const allowedTypes = [
-    "application/pdf",
-    "image/jpeg",
-    "image/png",
-    "image/jpg"
-  ];
-
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error("Only PDF and Image files allowed"), false);
-  }
-
-};
-
-const upload = multer({
+const upload = multer({ 
   storage,
-  fileFilter
+  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB
 });
 
 export default upload;

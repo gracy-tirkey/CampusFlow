@@ -1,7 +1,7 @@
-// server.js
+import "dotenv/config";
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import http from "http";
 
 import connectDB from "./config/db.js";
@@ -14,7 +14,6 @@ import quizRoutes from "./routes/quizRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 
-dotenv.config();
 connectDB();
 
 const app = express();
