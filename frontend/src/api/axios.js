@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5001/api"
+  baseURL: "https://campusflow-backend-6ga1.onrender.com/"
 });
 
 // Add request interceptor to include auth token
