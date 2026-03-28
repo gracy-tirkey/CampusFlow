@@ -6,17 +6,9 @@ import Message from "../models/Message.js"; // make sure this exists
 export const initSocket = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: [
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "http://localhost:5175",
-        "http://localhost:5176",
-        "http://localhost:5177",
-        "http://localhost:5178",
-        "http://localhost:5179",
-        "http://localhost:5180"
-      ]
-    }
+    origin: "https://campusflow-n4d1.onrender.com",
+    methods: ["GET", "POST"]
+  }
   });
 
   io.on("connection", (socket) => {
