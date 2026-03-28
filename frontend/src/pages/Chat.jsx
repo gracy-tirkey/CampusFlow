@@ -25,7 +25,9 @@ export default function Chat() {
 
   useEffect(() => {
     if (user && !socketRef.current) {
-      socketRef.current = io("http://localhost:5001");
+      socketRef.current = io("https://campusflow-backend-6ga1.onrender.com", {
+  transports: ["websocket"]
+);
       socketRef.current.emit("join_user", user._id);
       loadChatUsers();
 
