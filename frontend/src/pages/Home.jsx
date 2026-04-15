@@ -1,4 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
+
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -92,11 +93,12 @@ export default function Home() {
         <nav className="fixed top-0 w-full backdrop-blur-xl bg-glass border-b border-border z-40">
           <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <img
+              {/* <img
                 src="/images/logo-2.png"
                 alt="CampusFlow Logo"
                 className="h-8"
-              />
+              /> */}
+              <p className="sekuya-regular">cAMPUSFLOW</p>
               <span className="font-bold text-text-primary">CampusFlow</span>
             </div>
 

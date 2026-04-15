@@ -1,6 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 import {
   FaHome,
@@ -10,8 +9,6 @@ import {
   FaClipboardList,
   FaTimes,
   FaUserCircle,
-  FaMoon,
-  FaSun,
   FaBrain,
   FaBriefcase,
   FaCalendarAlt,
@@ -20,7 +17,6 @@ import {
 
 export default function Sidebar({ onClose }) {
   const location = useLocation();
-  const { isDarkMode, toggleTheme } = useTheme();
   const { user } = useAuth();
 
   const isActive = (path) => location.pathname === path;
@@ -81,12 +77,9 @@ export default function Sidebar({ onClose }) {
 
       {/* 🔹 HEADER (fixed) */}
       <div className="p-6 border-b border-border flex-shrink-0">
-        <div className="flex items-center justify-center h-16 bg-gradient-to-r from-primary to-accent rounded-2xl">
-          <img
-            src="/images/logo-2.png"
-            alt="Logo"
-            className="h-12 object-contain"
-          />
+        <div className="flex items-center justify-center h-16  rounded-2xl">
+          <p className="sekuya-regular">Campus</p>
+          <span className="text-primary audiowide-regular">FLOW</span>
         </div>
       </div>
 
@@ -132,28 +125,21 @@ export default function Sidebar({ onClose }) {
       </div>
 
       {/* 🔹 FOOTER (fixed) */}
-      <div className="border-t border-border p-4 space-y-4 flex-shrink-0">
-        {/* Theme Toggle */}
-        <button
-          onClick={toggleTheme}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-surface-secondary hover:bg-primary-hover rounded-xl text-text-primary transition-colors"
-        >
-          {isDarkMode ? <FaSun size={16} /> : <FaMoon size={16} />}
-          {isDarkMode ? "Light Mode" : "Dark Mode"}
-        </button>
-
+      <div className="border-t border-border p-4 flex-shrink-0">
         {/* Profile */}
-        <button className="w-full flex items-center gap-3 px-4 py-3 hover:bg-surface-secondary rounded-xl transition-colors">
-          <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
-            <FaUserCircle className="text-lg text-text-primary" />
-          </div>
-          <div className="text-left text-sm">
-            <p className="font-semibold text-text-primary text-xs">Account</p>
-            <p className="text-text-muted text-xs opacity-75">
-              Profile Settings
-            </p>
-          </div>
-        </button>
+        <Link to="/account-settings" onClick={onClose}>
+          <button className="w-full flex items-center gap-3 px-4 py-3 hover:bg-surface-secondary rounded-xl transition-colors">
+            <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+              <FaUserCircle className="text-lg text-text-primary" />
+            </div>
+            <div className="text-left text-sm">
+              <p className="font-semibold text-text-primary text-xs">Account</p>
+              <p className="text-text-muted text-xs opacity-75">
+                Profile Settings
+              </p>
+            </div>
+          </button>
+        </Link>
       </div>
     </motion.div>
   );

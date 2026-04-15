@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FaBars, FaSearch, FaBell, FaCog, FaMoon, FaSun } from "react-icons/fa";
-import { useTheme } from "../context/ThemeContext";
+import { FaBars, FaSearch, FaBell, FaCog } from "react-icons/fa";
 
 export default function Navbar({ onToggleSidebar, showSearch = true }) {
-  const { isDarkMode, toggleTheme } = useTheme();
   const [searchFocus, setSearchFocus] = useState(false);
 
   return (
@@ -59,17 +57,6 @@ export default function Navbar({ onToggleSidebar, showSearch = true }) {
           >
             <FaBell size={18} />
             <span className="absolute top-2 right-2 w-2 h-2 bg-orange-500 rounded-full"></span>
-          </motion.button>
-
-          {/* Theme Toggle */}
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={toggleTheme}
-            className="w-10 h-10 rounded-lg hover:bg-surface-secondary transition-all flex items-center justify-center text-text-primary"
-            title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-          >
-            {isDarkMode ? <FaSun size={18} /> : <FaMoon size={18} />}
           </motion.button>
 
           {/* Settings */}

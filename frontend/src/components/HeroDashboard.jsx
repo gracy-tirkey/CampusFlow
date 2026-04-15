@@ -94,6 +94,15 @@ export default function HeroDashboard() {
               value={stat.value}
               unit={stat.unit}
               trend={stat.trend}
+              category={
+                stat.title.includes("Notes")
+                  ? "notes"
+                  : stat.title.includes("Streak")
+                    ? "community"
+                    : stat.title.includes("Tasks")
+                      ? "career"
+                      : "stats"
+              }
             />
           ))}
         </div>
@@ -126,12 +135,14 @@ export default function HeroDashboard() {
           title="Upload Notes"
           description="Share your class notes"
           buttonText="Upload"
+          category="notes"
         />
         <ActionCard
           icon={FaBrain}
           title="AI Study Guide"
           description="Get personalized study plan"
           buttonText="Generate"
+          category="career"
         />
       </div>
 

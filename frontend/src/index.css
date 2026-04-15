@@ -13,3 +13,26 @@ html, body, #root {
   padding: 0;
   box-sizing: border-box;
 }
+
+.sekuya-regular {
+  font-family: "Sekuya", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.bangers-regular {
+  font-family: "Bangers", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.yesteryear-regular {
+  font-family: "Yesteryear", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+.audiowide-regular {
+  font-family: "Audiowide", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}

@@ -1,6 +1,31 @@
 import { motion } from "framer-motion";
 import clsx from "clsx";
 
+// Category-based gradient backgrounds
+const categoryGradients = {
+  stats: "bg-gradient-to-br from-blue-500/10 via-blue-600/5 to-cyan-500/10",
+  notes: "bg-gradient-to-br from-purple-500/10 via-purple-600/5 to-pink-500/10",
+  doubts: "bg-gradient-to-br from-orange-500/10 via-red-600/5 to-pink-500/10",
+  quizzes:
+    "bg-gradient-to-br from-green-500/10 via-emerald-600/5 to-teal-500/10",
+  career:
+    "bg-gradient-to-br from-indigo-500/10 via-purple-600/5 to-blue-500/10",
+  community:
+    "bg-gradient-to-br from-rose-500/10 via-pink-600/5 to-purple-500/10",
+  default:
+    "bg-gradient-to-br from-slate-500/10 via-slate-600/5 to-slate-700/10",
+};
+
+const categoryIconStyles = {
+  stats: "text-blue-500 bg-blue-500/15",
+  notes: "text-purple-500 bg-purple-500/15",
+  doubts: "text-orange-500 bg-orange-500/15",
+  quizzes: "text-emerald-500 bg-emerald-500/15",
+  career: "text-indigo-500 bg-indigo-500/15",
+  community: "text-pink-500 bg-pink-500/15",
+  default: "text-primary bg-primary/15",
+};
+
 export const ModernCard = ({
   children,
   className = "",
@@ -10,20 +35,27 @@ export const ModernCard = ({
   animation = true,
   delay = 0,
   onClick,
+  category = "default",
 }) => {
+  const gradientClass =
+    categoryGradients[category] || categoryGradients.default;
+
   const baseClasses = clsx(
-    "rounded-3xl p-6 transition-all duration-300",
+    "rounded-3xl p-6 transition-all duration-300 relative overflow-hidden",
     glass && "backdrop-blur-md bg-background/80 shadow-lg",
     !glass && "bg-surface shadow-md",
     elevated && "shadow-xl",
     hoverScale && "hover:scale-105 hover:shadow-xl",
+    gradientClass,
     className,
   );
 
   if (!animation) {
     return (
       <div className={baseClasses} onClick={onClick}>
-        {children}
+        {/* Subtle gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+        <div className="relative z-10">{children}</div>
       </div>
     );
   }
@@ -36,7 +68,9 @@ export const ModernCard = ({
       className={baseClasses}
       onClick={onClick}
     >
-      {children}
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+      <div className="relative z-10">{children}</div>
     </motion.div>
   );
 };
@@ -47,8 +81,9 @@ export const StatsCard = ({
   value,
   unit = "",
   trend = null,
+  category = "stats",
 }) => (
-  <ModernCard className="min-w-60">
+  <ModernCard category={category} className="min-w-60">
     <div className="flex items-start justify-between mb-4">
       <div>
         <p className="text-sm text-text-muted opacity-75 mb-2">{title}</p>
@@ -58,8 +93,13 @@ export const StatsCard = ({
         </div>
       </div>
       {Icon && (
-        <div className="bg-primary/20 p-3 rounded-2xl">
-          <Icon className="text-primary text-xl" />
+        <div
+          className={clsx(
+            "p-3 rounded-2xl",
+            categoryIconStyles[category] || categoryIconStyles.default,
+          )}
+        >
+          <Icon className="text-xl" />
         </div>
       )}
     </div>
@@ -82,15 +122,22 @@ export const ActionCard = ({
   description,
   onClick,
   buttonText = "View",
+  category = "default",
 }) => (
   <ModernCard
     onClick={onClick}
+    category={category}
     className="cursor-pointer hover:bg-surface-secondary"
   >
     <div className="flex items-start gap-4">
       {Icon && (
-        <div className="bg-primary/20 p-4 rounded-2xl flex-shrink-0">
-          <Icon className="text-primary text-2xl" />
+        <div
+          className={clsx(
+            "p-4 rounded-2xl flex-shrink-0",
+            categoryIconStyles[category] || categoryIconStyles.default,
+          )}
+        >
+          <Icon className="text-2xl" />
         </div>
       )}
       <div className="flex-1">

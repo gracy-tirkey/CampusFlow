@@ -22,6 +22,7 @@ import AIChat from "../pages/AIChat";
 import MentorConnect from "../pages/MentorConnect";
 import CareerHub from "../pages/CareerHub";
 import CampusFeed from "../pages/CampusFeed";
+import AccountSettings from "../pages/AccountSettings";
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -68,10 +69,10 @@ function AppRoutes() {
 
         {/* Protected Routes */}
         <Route
-          path="/edit-profile"
+          path="/account-settings"
           element={
             <ProtectedRoute>
-              <EditProfile />
+              <AccountSettings />
             </ProtectedRoute>
           }
         />
