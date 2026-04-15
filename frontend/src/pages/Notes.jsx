@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import API from "../api/axios";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { FaUpload, FaDownload, FaShareAlt, FaSearch } from "react-icons/fa";
+import { getRandomColor } from "../utils/colorPalette";
 
 export default function Notes() {
   const [notes, setNotes] = useState([]);
@@ -13,7 +14,7 @@ export default function Notes() {
   const buildFileUrl = (url) => {
     if (!url) return "";
     if (/^https?:\/\//i.test(url)) return url;
-    return `http://localhost:5001/${url.replace(/^\/+/, "")}`;
+    return `http://localhost:6090/${url.replace(/^\/+/, "")}`;
   };
 
   const isImageFile = (url) => {
@@ -23,13 +24,17 @@ export default function Notes() {
 
   const fetchNotes = async () => {
     try {
+      setLoading(true);
       const res = await API.get("/notes");
 
-      // 🔥 Fix: support different backend formats
-      setNotes(res.data.notes || res.data || []);
+      // ✅ Handle consistent response format with .data wrapper
+      const notesData = res.data?.data || res.data || [];
+      setNotes(Array.isArray(notesData) ? notesData : []);
+      setError("");
     } catch (err) {
-      console.error(err);
-      setError("Failed to load notes");
+      console.error("Error fetching notes:", err);
+      setNotes([]);
+      setError("Failed to load notes. Please refresh the page.");
     } finally {
       setLoading(false);
     }
@@ -39,11 +44,14 @@ export default function Notes() {
     fetchNotes();
   }, []);
 
-  const filteredNotes = notes.filter((note) =>
-    (note.title || "").toLowerCase().includes(search.toLowerCase()) ||
-    (note.subject || "").toLowerCase().includes(search.toLowerCase()) ||
-    (note.description || "").toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredNotes = Array.isArray(notes)
+    ? notes.filter(
+        (note) =>
+          (note.title || "").toLowerCase().includes(search.toLowerCase()) ||
+          (note.subject || "").toLowerCase().includes(search.toLowerCase()) ||
+          (note.description || "").toLowerCase().includes(search.toLowerCase()),
+      )
+    : [];
 
   const handleDownload = (fileUrl) => {
     if (!fileUrl) return;
@@ -87,7 +95,6 @@ export default function Notes() {
   return (
     <DashboardLayout>
       <div className="min-h-screen bg-light text-text p-6">
-
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
@@ -95,7 +102,7 @@ export default function Notes() {
           </h1>
 
           <Link to="/upload-notes">
-            <button className="flex items-center gap-2 bg-primary text-text px-4 py-2 rounded hover:bg-primary/80 transition">
+            <button className="flex items-center gap-2 bg-[#a29bfe] text-text px-4 py-2 rounded hover:bg-primary/80 transition">
               <FaUpload /> Upload New Note
             </button>
           </Link>
@@ -103,9 +110,7 @@ export default function Notes() {
 
         {/* Error */}
         {error && (
-          <div className="mb-4 p-2 bg-red-600 text-white rounded">
-            {error}
-          </div>
+          <div className="mb-4 p-2 bg-red-600 text-white rounded">{error}</div>
         )}
 
         {/* Search */}
@@ -127,10 +132,11 @@ export default function Notes() {
               No notes found.
             </div>
           ) : (
-            filteredNotes.map((note) => (
+            filteredNotes.map((note, index) => (
               <div
                 key={note._id}
-                className="bg-light border border-secondary/20 p-5 rounded-xl shadow hover:shadow-lg transition"
+                className="border border-secondary/20 p-5 rounded-xl shadow hover:shadow-lg transition"
+                style={{ backgroundColor: getRandomColor(index) }}
               >
                 <h2 className="font-bold text-lg mb-2">
                   {note.title || "Untitled"}
@@ -159,14 +165,14 @@ export default function Notes() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleDownload(note.fileUrl)}
-                    className="flex items-center gap-1 bg-primary text-white px-3 py-1 rounded text-sm"
+                    className="flex items-center gap-1 bg-[#02b875] text-white px-3 py-1 rounded text-sm"
                   >
                     <FaDownload /> Download
                   </button>
 
                   <button
                     onClick={() => handleShare(note)}
-                    className="flex items-center gap-1 bg-primary text-white px-3 py-1 rounded text-sm"
+                    className="flex items-center gap-1 bg-[#0a66c2] text-white px-3 py-1 rounded text-sm"
                   >
                     <FaShareAlt /> Share
                   </button>

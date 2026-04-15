@@ -15,19 +15,21 @@ function TakeQuiz() {
   const [score, setScore] = useState(null);
 
   useEffect(() => {
-    fetchQuiz();
-  }, [id]);
+    const loadQuiz = async () => {
+      try {
+        const response = await API.get(`/quizzes/${id}`);
+        // Handle both response formats
+        const quizData = response.data?.data || response.data;
+        setQuiz(quizData);
+      } catch (error) {
+        console.error("Error fetching quiz:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const fetchQuiz = async () => {
-    try {
-      const response = await API.get(`/quizzes/${id}`);
-      setQuiz(response.data);
-    } catch (error) {
-      console.error("Error fetching quiz:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    loadQuiz();
+  }, [id]);
 
   const handleAnswerChange = (questionIndex, answer) => {
     setAnswers({ ...answers, [questionIndex]: answer });
@@ -39,7 +41,9 @@ function TakeQuiz() {
     quiz.questions.forEach((question, index) => {
       if (answers[index] === question.correctAnswer) correctAnswers++;
     });
-    const finalScore = Math.round((correctAnswers / quiz.questions.length) * 100);
+    const finalScore = Math.round(
+      (correctAnswers / quiz.questions.length) * 100,
+    );
 
     try {
       await API.post("/quizzes/submit", { quizId: id, score: finalScore });
@@ -52,7 +56,8 @@ function TakeQuiz() {
   };
 
   const nextQuestion = () => {
-    if (currentQuestion < quiz.questions.length - 1) setCurrentQuestion(currentQuestion + 1);
+    if (currentQuestion < quiz.questions.length - 1)
+      setCurrentQuestion(currentQuestion + 1);
   };
 
   const prevQuestion = () => {
@@ -81,13 +86,24 @@ function TakeQuiz() {
     return (
       <DashboardLayout>
         <div className="text-center">
-          <h1 className="text-2xl md:text-3xl font-bold mb-6 text-text">Quiz Completed!</h1>
+          <h1 className="text-2xl md:text-3xl font-bold mb-6 text-text">
+            Quiz Completed!
+          </h1>
           <div className="bg-secondary p-6 md:p-8 rounded-lg shadow-md max-w-md mx-auto">
-            <h2 className="text-xl md:text-2xl font-bold text-text mb-4">Your Score</h2>
-            <p className="text-3xl md:text-4xl font-bold text-text mb-4">{score}%</p>
+            <h2 className="text-xl md:text-2xl font-bold text-text mb-4">
+              Your Score
+            </h2>
+            <p className="text-3xl md:text-4xl font-bold text-text mb-4">
+              {score}%
+            </p>
             <p className="text-text text-sm md:text-base mb-6">
               You got{" "}
-              {Object.values(answers).filter((answer, index) => answer === quiz.questions[index].correctAnswer).length}{" "}
+              {
+                Object.values(answers).filter(
+                  (answer, index) =>
+                    answer === quiz.questions[index].correctAnswer,
+                ).length
+              }{" "}
               out of {quiz.questions.length} questions correct.
             </p>
             <button
@@ -107,14 +123,18 @@ function TakeQuiz() {
   return (
     <DashboardLayout>
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-text">{quiz.title}</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-text">
+          {quiz.title}
+        </h1>
 
         <div className="bg-secondary p-4 md:p-6 rounded-lg shadow-md">
           <div className="mb-3 text-sm text-text/70">
             Question {currentQuestion + 1} of {quiz.questions.length}
           </div>
 
-          <h2 className="text-lg md:text-xl font-semibold mb-4 text-dark">{question.question}</h2>
+          <h2 className="text-lg md:text-xl font-semibold mb-4 text-dark">
+            {question.question}
+          </h2>
 
           <div className="space-y-2">
             {question.options.map((option, index) => (
@@ -148,7 +168,13 @@ function TakeQuiz() {
               disabled={submitting || !answers[currentQuestion]}
               className="flex items-center gap-2 bg-primary text-text px-3 py-2 rounded hover:bg-primary/80 disabled:opacity-50 transition-colors"
             >
-              {submitting ? "Submitting..." : <>Submit Quiz <FaCheck /></>}
+              {submitting ? (
+                "Submitting..."
+              ) : (
+                <>
+                  Submit Quiz <FaCheck />
+                </>
+              )}
             </button>
           ) : (
             <button

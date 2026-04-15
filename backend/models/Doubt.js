@@ -1,46 +1,116 @@
 import mongoose from "mongoose";
 
-const doubtSchema = new mongoose.Schema({
-
-  question: {
+// Define reply schema first
+const replySchema = new mongoose.Schema({
+  text: {
     type: String,
-    required: true
+    required: true,
   },
-
-  image: {
-    type: String
-  },
-
-  askedBy: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+    ref: "User",
+    required: true,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-  answers: [
-    {
-      text: String,
+const doubtSchema = new mongoose.Schema(
+  {
+    question: {
+      type: String,
+      required: true,
+    },
 
-      image: String,
+    image: String,
 
-      upVotes: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User"
-        }
-      ],
+    tags: [String],
 
-      answeredBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+    askedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    votes: {
+      type: Number,
+      default: 0,
+    },
+
+    votedBy: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        value: Number,
       },
+    ],
 
-      createdAt: {
-        type: Date,
-        default: Date.now
-      }
-    }
-  ]
+    views: {
+      type: Number,
+      default: 0,
+    },
 
-},{ timestamps:true });
+    bookmarkedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
+
+    // Remove old comments array - replaced by answers
+    // comments: [...], // DEPRECATED
+
+    answers: [
+      {
+        text: {
+          type: String,
+          required: true,
+        },
+        image: String,
+
+        isAI: {
+          type: Boolean,
+          default: false,
+        },
+
+        votes: {
+          type: Number,
+          default: 0,
+        },
+
+        votedBy: [
+          {
+            user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+            value: Number,
+          },
+        ],
+
+        replies: {
+          type: [replySchema],
+          default: [],
+        },
+
+        answeredBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+
+    pinnedAnswer: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: null,
+    },
+  },
+  { timestamps: true },
+);
 
 export default mongoose.model("Doubt", doubtSchema);

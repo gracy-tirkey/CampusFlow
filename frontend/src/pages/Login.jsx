@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   FaEnvelope,
@@ -7,16 +7,17 @@ import {
   FaEyeSlash,
   FaSignInAlt,
   FaUserPlus,
-  FaExclamationCircle
+  FaExclamationCircle,
 } from "react-icons/fa";
 
 import API from "../api/axios";
 import useBackgroundImage from "../hooks/useBackgroundImage";
 import { useAuth } from "../context/AuthContext";
+import { showSuccess, showError } from "../utils/toast";
 
 function Login() {
   const bgImage = useBackgroundImage();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,26 +27,39 @@ function Login() {
 
   const navigate = useNavigate();
 
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     if (!email || !password) {
-      setError("Please fill in all fields");
+      const msg = "Please fill in all fields";
+      setError(msg);
+      showError(msg);
       setLoading(false);
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError("Please enter a valid email");
+      const msg = "Please enter a valid email";
+      setError(msg);
+      showError(msg);
       setLoading(false);
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      const msg = "Password must be at least 6 characters";
+      setError(msg);
+      showError(msg);
       setLoading(false);
       return;
     }
@@ -53,18 +67,23 @@ function Login() {
     try {
       const res = await API.post("/auth/login", {
         email,
-        password
+        password,
       });
 
       login(res.data.user, res.data.token);
+      showSuccess("Login successful!");
 
-      if (res.data.user.role === "teacher") {
-        navigate("/teacher/dashboard");
-      } else {
-        navigate("/student/dashboard");
-      }
+      setTimeout(() => {
+        if (res.data.user.role === "teacher") {
+          navigate("/teacher/dashboard");
+        } else {
+          navigate("/student/dashboard");
+        }
+      }, 500);
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      const errorMsg = err.response?.data?.message || "Login failed";
+      setError(errorMsg);
+      showError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -72,7 +91,7 @@ function Login() {
 
   return (
     <div
-      className="flex justify-center items-center h-screen relative"
+      className="flex justify-center items-center min-h-screen relative py-6"
       style={{
         backgroundImage: `url(${bgImage})`,
         backgroundSize: "cover",
@@ -84,7 +103,7 @@ function Login() {
 
       <form
         onSubmit={handleSubmit}
-        className="relative bg-dark/80 backdrop-blur-md p-8 rounded-lg w-96 shadow-lg"
+        className="relative bg-dark/80 backdrop-blur-md p-8 rounded-lg w-full max-w-md shadow-lg mx-4"
       >
         {/* Title with icon */}
         <h2 className="text-2xl mb-6 text-center text-text flex items-center justify-center gap-2">
@@ -107,7 +126,12 @@ function Login() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 pl-10 bg-secondary text-text rounded placeholder-text/70"
+            disabled={loading}
+            className="w-full h-11 pl-10 pr-3 rounded-lg 
+                         bg-white/5 border border-white/10 
+                         text-text placeholder-text/60
+                         focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
+                         transition-all disabled:opacity-50"
             required
           />
         </div>
@@ -121,7 +145,12 @@ function Login() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 pl-10 pr-10 bg-secondary text-text rounded placeholder-text/70"
+            disabled={loading}
+            className="w-full h-11 pl-10 pr-3 rounded-lg 
+                         bg-white/5 border border-white/10 
+                         text-text placeholder-text/60
+                         focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
+                         transition-all disabled:opacity-50"
             required
           />
 

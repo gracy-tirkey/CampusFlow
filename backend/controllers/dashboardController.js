@@ -10,21 +10,29 @@ export const getDashboardStats = async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
     }
 
     let stats = {};
 
     if (user.role === "student") {
       // Notes Downloaded: count notes uploaded by teachers (assuming students can download them)
-      const notesDownloaded = await Note.countDocuments({ downloadedBy: userId });
+      const notesDownloaded = await Note.countDocuments({
+        downloadedBy: userId,
+      });
 
       // Doubts Asked: count doubts asked by user
       const doubtsAsked = await Doubt.countDocuments({ askedBy: userId });
 
       // Quiz Points: sum of all quiz scores for the user
       const quizResults = await Result.find({ userId });
-      const quizPoints = quizResults.reduce((total, result) => total + (result.score || 0), 0);
+      const quizPoints = quizResults.reduce(
+        (total, result) => total + (result.score || 0),
+        0,
+      );
 
       stats = {
         notesDownloaded,
@@ -36,7 +44,9 @@ export const getDashboardStats = async (req, res) => {
       const notesUploaded = await Note.countDocuments({ uploadedBy: userId });
 
       // Doubts Solved: count answers given by user
-      const doubtsSolved = await Doubt.countDocuments({ "answers.answeredBy": userId });
+      const doubtsSolved = await Doubt.countDocuments({
+        "answers.answeredBy": userId,
+      });
 
       // Quizzes Created: count quizzes created by user
       const quizzesCreated = await Quiz.countDocuments({ createdBy: userId });
@@ -44,13 +54,21 @@ export const getDashboardStats = async (req, res) => {
       stats = {
         notesUploaded,
         doubtsSolved,
-        quizzesCreated
+        quizzesCreated,
       };
     }
 
-    res.json(stats);
+    res.status(200).json({
+      success: true,
+      message: "Dashboard stats retrieved successfully",
+      data: stats,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message || "Error fetching dashboard stats",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
   }
 };
 
@@ -58,8 +76,17 @@ export const getUserQuizzes = async (req, res) => {
   try {
     const userId = req.user.id;
     const results = await Result.find({ userId }).populate("quizId", "title");
-    res.json(results);
+
+    res.status(200).json({
+      success: true,
+      message: "User quizzes retrieved successfully",
+      data: results,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message || "Error fetching user quizzes",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
   }
 };

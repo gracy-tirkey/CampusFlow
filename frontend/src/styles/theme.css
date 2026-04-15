@@ -1,17 +1,101 @@
-src/styles/theme.css
+/* Global styles for CampusFlow dark theme */
 
-:root {
-  --bg-light: #0F172A;
-  --primary: #059669;
-  --secondary: #047857;
-  --dark: #F0FDF4;
-  --accent-dark: #047857;
-  --text: #F0FDF4;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-text-primary font-sans antialiased;
+  }
+
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  /* Selection */
+  ::selection {
+    @apply bg-primary/20 text-text-primary;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background-secondary;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-border-light;
+  }
 }
 
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background-color: var(--bg-light);
-  color: var(--dark);
+/* Component styles */
+@layer components {
+  /* Button variants */
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-hover active:bg-primary-active text-text-primary px-4 py-2 rounded-md font-medium transition-colors duration-200 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary hover:bg-secondary-hover active:bg-secondary-active text-text-primary px-4 py-2 rounded-md font-medium transition-colors duration-200 focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  .btn-outline {
+    @apply border border-border hover:border-border-light bg-transparent hover:bg-surface text-text-primary px-4 py-2 rounded-md font-medium transition-colors duration-200 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent hover:bg-surface text-text-secondary hover:text-text-primary px-4 py-2 rounded-md font-medium transition-colors duration-200 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-surface border border-border rounded-lg p-6 shadow-soft;
+  }
+
+  .card-elevated {
+    @apply bg-surface border border-border rounded-lg p-6 shadow-elevated;
+  }
+
+  .card-glass {
+    @apply bg-glass backdrop-blur-sm border border-border rounded-lg p-6 shadow-glass;
+  }
+
+  /* Input styles */
+  .input {
+    @apply bg-background-secondary border border-border rounded-md px-3 py-2 text-text-primary placeholder-text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-colors duration-200;
+  }
+
+  /* Link styles */
+  .link {
+    @apply text-primary hover:text-primary-hover underline underline-offset-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+  }
+}
+
+/* Tailwind utility compatibility - keep for backward compatibility */
+.bg-light { background-color: var(--bg-primary); }
+.bg-dark { background-color: var(--bg-secondary); }
+.bg-secondary { background-color: var(--bg-tertiary); }
+
+.text-light { color: var(--text-primary); }
+.text-dark { color: var(--text-primary); }
+.text-text { color: var(--text-primary); }
+.text-muted { color: var(--text-tertiary); }
+
+/* Smooth transitions for theme changes */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }

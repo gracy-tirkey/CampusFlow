@@ -19,10 +19,13 @@ function Quiz() {
   const fetchQuizzes = async () => {
     try {
       const response = await API.get("/quizzes");
-      setQuizzes(response.data);
+      // Handle both response formats: wrapped {data} and direct array
+      const quizzesData = response.data?.data || response.data || [];
+      setQuizzes(Array.isArray(quizzesData) ? quizzesData : []);
     } catch (err) {
       setError("Failed to load quizzes");
       console.error("Error fetching quizzes:", err);
+      setQuizzes([]);
     } finally {
       setLoading(false);
     }

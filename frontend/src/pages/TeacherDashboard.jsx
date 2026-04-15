@@ -17,9 +17,17 @@ function TeacherDashboard() {
     const fetchStats = async () => {
       try {
         const response = await API.get("/dashboard/stats");
-        setStats(response.data);
+        // Handle both response formats: wrapped {data} and direct object
+        const statsData = response.data?.data || response.data || {};
+        setStats(statsData);
       } catch (error) {
         console.error("Error fetching dashboard stats:", error);
+        // Set default stats on error
+        setStats({
+          notesUploaded: 0,
+          doubtsSolved: 0,
+          quizzesCreated: 0,
+        });
       } finally {
         setLoading(false);
       }
@@ -46,27 +54,36 @@ function TeacherDashboard() {
         {/* Notes Uploaded */}
         <div className="bg-secondary p-4 md:p-6 rounded-lg shadow-md hover:bg-secondary/80 transition-colors flex flex-col items-start gap-2">
           <div className="flex items-center gap-2 text-primary">
-            <FaUpload /> <h3 className="text-lg font-semibold text-dark">Notes Uploaded</h3>
+            <FaUpload />{" "}
+            <h3 className="text-lg font-semibold text-dark">Notes Uploaded</h3>
           </div>
-          <p className="text-2xl font-bold text-primary">{stats.notesUploaded}</p>
+          <p className="text-2xl font-bold text-primary">
+            {stats.notesUploaded}
+          </p>
           <p className="text-text text-sm">Manage your uploaded notes</p>
         </div>
 
         {/* Doubts Solved */}
         <div className="bg-secondary p-4 md:p-6 rounded-lg shadow-md hover:bg-secondary/80 transition-colors flex flex-col items-start gap-2">
           <div className="flex items-center gap-2 text-primary">
-            <FaCheckCircle /> <h3 className="text-lg font-semibold text-dark">Doubts Solved</h3>
+            <FaCheckCircle />{" "}
+            <h3 className="text-lg font-semibold text-dark">Doubts Solved</h3>
           </div>
-          <p className="text-2xl font-bold text-primary">{stats.doubtsSolved}</p>
+          <p className="text-2xl font-bold text-primary">
+            {stats.doubtsSolved}
+          </p>
           <p className="text-text text-sm">View doubts you've answered</p>
         </div>
 
         {/* Quizzes Created */}
         <div className="bg-secondary p-4 md:p-6 rounded-lg shadow-md hover:bg-secondary/80 transition-colors flex flex-col items-start gap-2">
           <div className="flex items-center gap-2 text-primary">
-            <FaClipboardList /> <h3 className="text-lg font-semibold text-dark">Quizzes Created</h3>
+            <FaClipboardList />{" "}
+            <h3 className="text-lg font-semibold text-dark">Quizzes Created</h3>
           </div>
-          <p className="text-2xl font-bold text-primary">{stats.quizzesCreated}</p>
+          <p className="text-2xl font-bold text-primary">
+            {stats.quizzesCreated}
+          </p>
           <p className="text-text text-sm">Manage your created quizzes</p>
         </div>
       </div>

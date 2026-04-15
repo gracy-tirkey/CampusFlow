@@ -10,75 +10,83 @@ import React from "react";
 
 function Footer() {
   return (
-    <footer className="bg-dark text-text py-12">
+    <footer className="bg-dark/95 text-text py-12">
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-10">
-
         {/* Brand */}
         <div>
-          <h2 className="text-2xl font-bold text-secondary">
-            CampusFlow
-          </h2>
+          <h2 className="text-2xl font-bold text-secondary">CampusFlow</h2>
           <p className="mt-3 text-sm text-text/80 leading-relaxed">
-            Empowering students and educators with a seamless platform to 
-            share notes, collaborate, and solve doubts efficiently.
+            Empowering students and educators with a seamless platform to share
+            notes, collaborate, and solve doubts efficiently.
           </p>
 
           {/* Version / Status */}
-          <p className="mt-4 text-xs text-text/60 flex items-center gap-2">
+          <p className="mt-4 text-xs text-text-muted flex items-center gap-2">
             <FaCodeBranch /> Version 1.0
           </p>
         </div>
 
         {/* Platform */}
         <div>
-          <h3 className="text-lg font-semibold text-primary mb-3">
-            Platform
-          </h3>
+          <h3 className="text-lg font-semibold text-primary mb-3">Platform</h3>
           <ul className="space-y-2 text-sm">
             <li>
-              <Link to="/" className="hover:text-secondary">Home</Link>
+              <Link to="/" className="hover:text-secondary">
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/notes" className="hover:text-secondary">Notes</Link>
+              <Link to="/notes" className="hover:text-secondary">
+                Notes
+              </Link>
             </li>
             <li>
-              <Link to="/doubts" className="hover:text-secondary">Doubts</Link>
+              <Link to="/doubts" className="hover:text-secondary">
+                Doubts
+              </Link>
             </li>
             <li>
-              <Link to="/dashboard" className="hover:text-secondary">Dashboard</Link>
+              <Link to="/dashboard" className="hover:text-secondary">
+                Dashboard
+              </Link>
             </li>
           </ul>
         </div>
 
         {/* Resources */}
         <div>
-          <h3 className="text-lg font-semibold text-primary mb-3">
-            Resources
-          </h3>
+          <h3 className="text-lg font-semibold text-primary mb-3">Resources</h3>
           <ul className="space-y-2 text-sm">
             <li>
-              <Link to="/about" className="hover:text-secondary">About</Link>
+              <Link to="/" className="hover:text-secondary">
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/contact" className="hover:text-secondary">Contact</Link>
+              <Link to="/login" className="hover:text-secondary">
+                Login
+              </Link>
             </li>
             <li>
-              <Link to="/privacy" className="hover:text-secondary">Privacy Policy</Link>
+              <Link to="/register" className="hover:text-secondary">
+                Register
+              </Link>
             </li>
             <li>
-              <Link to="/terms" className="hover:text-secondary">Terms of Service</Link>
+              <Link to="/notes" className="hover:text-secondary">
+                Notes
+              </Link>
             </li>
           </ul>
         </div>
 
         {/* Developer / Contact */}
         <div>
-          <h3 className="text-lg font-semibold text-primary mb-3">
-            Developer
-          </h3>
+          <h3 className="text-lg font-semibold text-primary mb-3">Developer</h3>
 
           <p className="text-sm text-text/80">
-            Built by <span className="text-secondary font-medium">Gracy Tirkey</span>
+            Built by{" "}
+            <span className="text-secondary font-medium">Gracy Tirkey</span>
           </p>
 
           <p className="text-xs mt-2 text-text/60">
@@ -126,9 +134,7 @@ function Footer() {
 
       {/* Bottom */}
       <div className="border-t border-secondary mt-10 pt-5 text-center text-sm text-text/70">
-        <p>
-          © {new Date().getFullYear()} CampusFlow. All rights reserved.
-        </p>
+        <p>© {new Date().getFullYear()} CampusFlow. All rights reserved.</p>
 
         <p className="mt-2 flex justify-center items-center gap-2 text-xs text-text/60">
           Made with <FaHeart className="text-red-500" /> using MERN Stack

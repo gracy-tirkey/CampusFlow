@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import {
   FaUser,
   FaEnvelope,
@@ -10,24 +10,25 @@ import {
   FaChalkboardTeacher,
   FaUserPlus,
   FaExclamationCircle,
-  FaSignInAlt
-} from 'react-icons/fa';
+  FaSignInAlt,
+} from "react-icons/fa";
 
-import API from '../api/axios';
+import API from "../api/axios";
 import useBackgroundImage from "../hooks/useBackgroundImage";
+import { showSuccess, showError } from "../utils/toast";
 
 function Register() {
   const bgImage = useBackgroundImage();
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'student'
+    name: "",
+    email: "",
+    password: "",
+    role: "student",
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -35,23 +36,25 @@ function Register() {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     if (!formData.name || !formData.email || !formData.password) {
       setError("Please fill in all fields");
+      showError("Please fill in all fields");
       setLoading(false);
       return;
     }
 
     if (formData.name.length < 2) {
       setError("Name must be at least 2 characters");
+      showError("Name must be at least 2 characters");
       setLoading(false);
       return;
     }
@@ -59,21 +62,27 @@ function Register() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError("Please enter a valid email");
+      showError("Please enter a valid email");
       setLoading(false);
       return;
     }
 
     if (formData.password.length < 6) {
       setError("Password must be at least 6 characters");
+      showError("Password must be at least 6 characters");
       setLoading(false);
       return;
     }
 
     try {
-      await API.post('/auth/register', formData);
-      navigate('/login');
+      await API.post("/auth/register", formData);
+      showSuccess("Registration successful! Check your email for OTP.");
+      // Redirect to OTP verification with email
+      navigate("/verify-email", { state: { email: formData.email } });
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      const errorMsg = err.response?.data?.message || "Registration failed";
+      setError(errorMsg);
+      showError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -81,7 +90,7 @@ function Register() {
 
   return (
     <div
-      className="flex justify-center items-center h-screen relative"
+      className="flex justify-center items-center min-h-screen relative py-6"
       style={{
         backgroundImage: `url(${bgImage})`,
         backgroundSize: "cover",
@@ -91,8 +100,7 @@ function Register() {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
 
-      <div className="relative bg-dark/90 backdrop-blur-md p-8 rounded-xl w-96 shadow-2xl border border-white/10">
-
+      <div className="relative bg-dark/90 backdrop-blur-md p-8 rounded-xl w-full max-w-md shadow-2xl border border-white/10 mx-4">
         {/* Title */}
         <h2 className="text-2xl mb-6 text-center text-text flex items-center justify-center gap-2">
           <FaUserPlus className="text-primary" />
@@ -108,12 +116,13 @@ function Register() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-
           {/* Reusable Input Style */}
           {/* Name */}
           <div className="relative group">
-            <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 
-                              text-primary/70 group-focus-within:text-primary" />
+            <FaUser
+              className="absolute left-3 top-1/2 -translate-y-1/2 
+                              text-primary/70 group-focus-within:text-primary"
+            />
 
             <input
               type="text"
@@ -121,19 +130,22 @@ function Register() {
               placeholder="Name"
               value={formData.name}
               onChange={handleChange}
+              disabled={loading}
               className="w-full h-11 pl-10 pr-3 rounded-lg 
                          bg-white/5 border border-white/10 
                          text-text placeholder-text/60
                          focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
-                         transition-all"
+                         transition-all disabled:opacity-50"
               required
             />
           </div>
 
           {/* Email */}
           <div className="relative group">
-            <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 
-                                  text-primary/70 group-focus-within:text-primary" />
+            <FaEnvelope
+              className="absolute left-3 top-1/2 -translate-y-1/2 
+                                  text-primary/70 group-focus-within:text-primary"
+            />
 
             <input
               type="email"
@@ -141,19 +153,22 @@ function Register() {
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
+              disabled={loading}
               className="w-full h-11 pl-10 pr-3 rounded-lg 
                          bg-white/5 border border-white/10 
                          text-text placeholder-text/60
                          focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
-                         transition-all"
+                         transition-all disabled:opacity-50"
               required
             />
           </div>
 
           {/* Password */}
           <div className="relative group">
-            <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 
-                               text-primary/70 group-focus-within:text-primary" />
+            <FaLock
+              className="absolute left-3 top-1/2 -translate-y-1/2 
+                               text-primary/70 group-focus-within:text-primary"
+            />
 
             <input
               type={showPassword ? "text" : "password"}
@@ -161,11 +176,12 @@ function Register() {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
+              disabled={loading}
               className="w-full h-11 pl-10 pr-10 rounded-lg 
                          bg-white/5 border border-white/10 
                          text-text placeholder-text/60
                          focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
-                         transition-all"
+                         transition-all disabled:opacity-50"
               required
             />
 
@@ -181,25 +197,34 @@ function Register() {
           {/* Role */}
           <div className="relative group">
             {formData.role === "student" ? (
-              <FaUserGraduate className="absolute left-3 top-1/2 -translate-y-1/2 
-                                         text-primary/70 group-focus-within:text-primary" />
+              <FaUserGraduate
+                className="absolute left-3 top-1/2 -translate-y-1/2 
+                                         text-primary/70 group-focus-within:text-primary"
+              />
             ) : (
-              <FaChalkboardTeacher className="absolute left-3 top-1/2 -translate-y-1/2 
-                                              text-primary/70 group-focus-within:text-primary" />
+              <FaChalkboardTeacher
+                className="absolute left-3 top-1/2 -translate-y-1/2 
+                                              text-primary/70 group-focus-within:text-primary"
+              />
             )}
 
             <select
               name="role"
               value={formData.role}
               onChange={handleChange}
+              disabled={loading}
               className="w-full h-11 pl-10 pr-3 rounded-lg 
                          bg-white/5 border border-white/10 
                          text-text
                          focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
-                         transition-all appearance-none"
+                         transition-all appearance-none disabled:opacity-50"
             >
-              <option className="bg-dark text-white" value="student">Student</option>
-              <option className="bg-dark text-white" value="teacher">Teacher</option>
+              <option className="bg-dark text-white" value="student">
+                Student
+              </option>
+              <option className="bg-dark text-white" value="teacher">
+                Teacher
+              </option>
             </select>
           </div>
 
@@ -210,7 +235,7 @@ function Register() {
             className="w-full h-11 bg-primary hover:bg-primary/80 rounded-lg text-text 
                        flex items-center justify-center gap-2 transition-all disabled:opacity-50"
           >
-            {loading ? 'Registering...' : 'Register'}
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
 
