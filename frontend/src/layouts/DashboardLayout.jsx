@@ -7,7 +7,6 @@ function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    // ✅ Use theme-aware classes from global state
     <div
       className={`flex h-screen bg-background dark:bg-dark text-text dark:text-light transition-colors duration-300`}
     >
